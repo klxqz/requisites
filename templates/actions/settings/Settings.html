@@ -1,0 +1,94 @@
+
+<h1>Реквизиты</h1>
+<div     class="fields form">
+    <form action="?plugin=requisites&action=save" method="post" id="plugins-settings-form">
+        {$wa->csrf()}
+
+
+        <div class="field">
+            <div class="name">
+                Статус
+            </div>
+            <div class="value">
+                <select name="shop_requisites[status]">
+                    <option {if $settings.status == 1} selected="selected"{/if} value="1">Включен</option>
+                    <option {if $settings.status == 0} selected="selected"{/if} value="0">Выключен</option>
+                </select>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="field">
+            <div class="name"><label>Название компании</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[COMPANYNAME]" > 
+                <br><span class="hint">Укажите название организации, от имени которой выписывается счет</span></div>
+        </div>
+        <div class="field">
+            <div class="name"><label>Адрес компании</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[COMPANYADDRESS]" > 
+                <br><span class="hint">Укажите адрес организации, от имени которой выписывается счет</span></div>
+        </div>
+        <div class="field">
+            <div class="name"><label>Телефон компании</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[COMPANYPHONE]" > 
+                <br><span class="hint">Укажите телефон организации</span></div>
+        </div>
+        <div class="field">
+            <div class="name"><label>Директор компании</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[CEO_NAME]" > 
+                <br><span class="hint">Укажите Фамилию И.О.</span></div>
+        </div>
+        <div class="field">
+            <div class="name"><label>Бухгалтер компании</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BUH_NAME]" > 
+                <br><span class="hint">Укажите Фамилию И.О.</span></div>
+        </div>
+        <div class="field">
+            <div class="name"><label>Расчетный счет</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BANK_ACCOUNT_NUMBER]" > 
+                <br><span class="hint">Номер расчетного счета организации</span></div>
+        </div>
+        <div class="field">
+            <div class="name"><label>ИНН</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[INN]" > 
+                <br><span class="hint">ИНН организации</span></div>
+        </div>
+        <div class="field">
+            <div class="name"><label>КПП</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[KPP]" > </div>
+        </div>
+        <div class="field">
+            <div class="name"><label>Наименование банка</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BANKNAME]" > </div>
+        </div>
+        <div class="field">
+            <div class="name"><label>Корреспондентский счет</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BANK_KOR_NUMBER]" > </div>
+        </div>
+        <div class="field">
+            <div class="name"><label>БИК</label>
+            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BIK]" > </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="field">
+            <div class="value submit">
+                <input type="submit" class="button green" value="Сохранить">
+                <span id="plugins-settings-form-status" style="display:none">
+                    <i style="vertical-align:middle" class="icon16 yes"></i> [`Saved`]
+                </span>
+            </div>
+        </div>
+    </form>
+</div>
+
