@@ -1,78 +1,255 @@
+<style>
+    #dialog label, #dialog input { display:block; }
+    #dialog label { margin-top: 0.5em; }
+    #dialog input, #dialog textarea { width: 95%; }
+    #tabs { margin-top: 1em; }
+    #tabs li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+    #add_tab { cursor: pointer; }
+    .ui-dialog .ui-dialog-titlebar-close span{
+        margin: -8px !important;
+    }
+    .fields-payment{
+        display: none;
+    }
+</style>
+
+<link href="{$wa_app_static_url}plugins/requisites/css/no-theme/jquery-ui-1.10.4.custom.css" rel="stylesheet">
+
+<script src="{$wa_app_static_url}plugins/requisites/js/jquery-1.10.2.js"></script>
+<script src="{$wa_app_static_url}plugins/requisites/js/jquery-ui-1.10.4.custom.min.js"></script>
+
+<script>
+    $(function() {
+        var tabTitle = $("#tab_title"),
+                tabContent = $("#tab_content"),
+                tabTemplate = '<li><a href="#[href]">#[label]</a> <span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span></li>',
+                tabCounter = {count($profiles) + 1};
+
+        var tabs = $("#tabs").tabs();
+
+        var dialog = $("#dialog").dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                Add: function() {
+                    addTab();
+                    $(this).dialog("close");
+                },
+                Cancel: function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+        var form = dialog.find("form").submit(function(event) {
+            addTab();
+            dialog.dialog("close");
+            event.preventDefault();
+        });
+
+        function addTab() {
+            var label = tabTitle.val() || "Новый профиль " + tabCounter,
+                    id = "tabs-" + tabCounter,
+                    li = $(tabTemplate.replace(/#\[href\]/g, "#" + id).replace(/#\[label\]/g, label));
+            tabs.find(".ui-tabs-nav").append(li);
+            tabs.append('<div id="' + id + '">\
+<input type="hidden" name="profile_names[' + tabCounter + ']" value="' + label + '">\
+<p>\
+    <div class="field">\
+        <div class="name"><label>Название компании</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][COMPANYNAME]" > \
+            <br><span class="hint">Укажите название организации, от имени которой выписывается счет</span></div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>Адрес компании</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][COMPANYADDRESS]" > \
+            <br><span class="hint">Укажите адрес организации, от имени которой выписывается счет</span></div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>Телефон компании</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][COMPANYPHONE]" > \
+            <br><span class="hint">Укажите телефон организации</span></div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>Директор компании</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][CEO_NAME]" > \
+            <br><span class="hint">Укажите Фамилию И.О.</span></div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>Бухгалтер компании</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][BUH_NAME]" > \
+            <br><span class="hint">Укажите Фамилию И.О.</span></div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>Индивидуальный предприниматель</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][IP_NAME]" > \
+            <br><span class="hint">Укажите Фамилию И.О.</span></div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>Реквизиты</label>\
+        </div><div class="value"><textarea class="textarea" name="profiles[' + tabCounter + '][IP_REGISTRATION]"></textarea>\
+            <br><span class="hint">Укажите реквизиты свидетельства о государственной регистрации индивидуального предпринимателя</span></div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>Расчетный счет</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][BANK_ACCOUNT_NUMBER]" > \
+            <br><span class="hint">Номер расчетного счета организации</span></div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>ИНН</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][INN]" > \
+            <br><span class="hint">ИНН организации</span></div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>КПП</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][KPP]" > </div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>Наименование банка</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][BANKNAME]" > </div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>Корреспондентский счет</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][BANK_KOR_NUMBER]" > </div>\
+    </div>\
+    <div class="field">\
+        <div class="name"><label>БИК</label>\
+        </div><div class="value"><input type="text" value="" class="input" name="profiles[' + tabCounter + '][BIK]" > </div>\
+    </div>\
+</p></div>');
+            tabs.tabs("refresh");
+            tabCounter++;
+        }
+
+
+        $("#add_tab").click(function() {
+            dialog.dialog("open");
+            return false;
+        });
+
+
+        // close icon: removing the tab on click
+        tabs.delegate("span.ui-icon-close", "click", function() {
+            var panelId = $(this).closest("li").remove().attr("aria-controls");
+            $("#" + panelId).remove();
+            tabs.tabs("refresh");
+        });
+    });
+</script>
+
+
+<div id="dialog" title="Новый профиль">
+    <form>
+        <fieldset class="ui-helper-reset">
+            <label for="tab_title">Название</label>
+            <input type="text" name="tab_title" id="tab_title" value="Новый профиль" class="ui-widget-content ui-corner-all">
+        </fieldset>
+    </form>
+</div>
+
+
 
 <h1>Реквизиты</h1>
-<div     class="fields form">
+<div class="fields form">
     <form action="?plugin=requisites&action=save" method="post" id="plugins-settings-form">
         {$wa->csrf()}
+
+        <p>
+            <a id="add_tab" href="#"><i class="icon16 add"></i>Добавить профиль</a>
+        </p>
+        <div id="tabs">
+            <ul>
+                {foreach $profile_names as $profile_id => $profile_name}
+                <li><a href="#tabs-{$profile_id}">{$profile_name|escape}</a> <span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span></li>
+                {/foreach}
+            </ul>
+            {foreach $profiles as $profile_id => $profile}
+            <div id="tabs-{$profile_id}">
+                <div class="field">
+                    <div class="name"><label>Профиль</label>
+                    </div><div class="value"><input type="text" name="profile_names[{$profile_id}]" value="{$profile_names[$profile_id]|escape}">
+                    </div>
+                </div>
+
+                <hr/>
+                <p>
+                <div class="field">
+                    <div class="name"><label>Название компании</label>
+                    </div><div class="value"><input type="text" value="{$profile.COMPANYNAME|escape}" class="input" name="profiles[{$profile_id}][COMPANYNAME]" > 
+                        <br><span class="hint">Укажите название организации, от имени которой выписывается счет</span></div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>Адрес компании</label>
+                    </div><div class="value"><input type="text" value="{$profile.COMPANYADDRESS|escape}" class="input" name="profiles[{$profile_id}][COMPANYADDRESS]" > 
+                        <br><span class="hint">Укажите адрес организации, от имени которой выписывается счет</span></div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>Телефон компании</label>
+                    </div><div class="value"><input type="text" value="{$profile.COMPANYPHONE|escape}" class="input" name="profiles[{$profile_id}][COMPANYPHONE]" > 
+                        <br><span class="hint">Укажите телефон организации</span></div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>Директор компании</label>
+                    </div><div class="value"><input type="text" value="{$profile.CEO_NAME|escape}" class="input" name="profiles[{$profile_id}][CEO_NAME]" > 
+                        <br><span class="hint">Укажите Фамилию И.О.</span></div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>Бухгалтер компании</label>
+                    </div><div class="value"><input type="text" value="{$profile.BUH_NAME|escape}" class="input" name="profiles[{$profile_id}][BUH_NAME]" > 
+                        <br><span class="hint">Укажите Фамилию И.О.</span></div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>Индивидуальный предприниматель</label>
+                    </div><div class="value"><input type="text" value="{$profile.IP_NAME|escape}" class="input" name="profiles[{$profile_id}][IP_NAME]"> 
+                        <br><span class="hint">Укажите Фамилию И.О.</span></div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>Реквизиты</label>
+                    </div><div class="value"><textarea class="textarea" name="profiles[{$profile_id}][IP_REGISTRATION]">{$profile.IP_REGISTRATION|escape}</textarea> 
+                        <br><span class="hint">Укажите реквизиты свидетельства о государственной регистрации индивидуального предпринимателя</span></div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>Расчетный счет</label>
+                    </div><div class="value"><input type="text" value="{$profile.BANK_ACCOUNT_NUMBER|escape}" class="input" name="profiles[{$profile_id}][BANK_ACCOUNT_NUMBER]" > 
+                        <br><span class="hint">Номер расчетного счета организации</span></div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>ИНН</label>
+                    </div><div class="value"><input type="text" value="{$profile.INN|escape}" class="input" name="profiles[{$profile_id}][INN]" >
+                        <br><span class="hint">ИНН организации</span></div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>КПП</label>
+                    </div><div class="value"><input type="text" value="{$profile.KPP|escape}" class="input" name="profiles[{$profile_id}][KPP]" > </div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>Наименование банка</label>
+                    </div><div class="value"><input type="text" value="{$profile.BANKNAME|escape}" class="input" name="profiles[{$profile_id}][BANKNAME]" > </div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>Корреспондентский счет</label>
+                    </div><div class="value"><input type="text" value="{$profile.BANK_KOR_NUMBER|escape}" class="input" name="profiles[{$profile_id}][BANK_KOR_NUMBER]" > </div>
+                </div>
+                <div class="field">
+                    <div class="name"><label>БИК</label>
+                    </div><div class="value"><input type="text" value="{$profile.BIK|escape}" class="input" name="profiles[{$profile_id}][BIK]" > </div>
+                </div>
+            </div>
+            {/foreach}
+        </div>
 
 
         <div class="field">
             <div class="name">
-                Статус
+                <label>Используемый профиль</label>
             </div>
             <div class="value">
-                <select name="shop_requisites[status]">
-                    <option {if $settings.status == 1} selected="selected"{/if} value="1">Включен</option>
-                    <option {if $settings.status == 0} selected="selected"{/if} value="0">Выключен</option>
+                <select name="shop_requisites[profile]">
+                    <option></option>
+                    {foreach $profile_names as $profile_id => $profile_name}
+                    <option {if $settings.profile == $profile_id}selected="selected"{/if} value="{$profile_id}">{$profile_name}</option>
+                    {/foreach}                    
                 </select>
             </div>
-        </div>
-
-
-
-
-
-
-
-        <div class="field">
-            <div class="name"><label>Название компании</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[COMPANYNAME]" > 
-                <br><span class="hint">Укажите название организации, от имени которой выписывается счет</span></div>
-        </div>
-        <div class="field">
-            <div class="name"><label>Адрес компании</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[COMPANYADDRESS]" > 
-                <br><span class="hint">Укажите адрес организации, от имени которой выписывается счет</span></div>
-        </div>
-        <div class="field">
-            <div class="name"><label>Телефон компании</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[COMPANYPHONE]" > 
-                <br><span class="hint">Укажите телефон организации</span></div>
-        </div>
-        <div class="field">
-            <div class="name"><label>Директор компании</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[CEO_NAME]" > 
-                <br><span class="hint">Укажите Фамилию И.О.</span></div>
-        </div>
-        <div class="field">
-            <div class="name"><label>Бухгалтер компании</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BUH_NAME]" > 
-                <br><span class="hint">Укажите Фамилию И.О.</span></div>
-        </div>
-        <div class="field">
-            <div class="name"><label>Расчетный счет</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BANK_ACCOUNT_NUMBER]" > 
-                <br><span class="hint">Номер расчетного счета организации</span></div>
-        </div>
-        <div class="field">
-            <div class="name"><label>ИНН</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[INN]" > 
-                <br><span class="hint">ИНН организации</span></div>
-        </div>
-        <div class="field">
-            <div class="name"><label>КПП</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[KPP]" > </div>
-        </div>
-        <div class="field">
-            <div class="name"><label>Наименование банка</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BANKNAME]" > </div>
-        </div>
-        <div class="field">
-            <div class="name"><label>Корреспондентский счет</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BANK_KOR_NUMBER]" > </div>
-        </div>
-        <div class="field">
-            <div class="name"><label>БИК</label>
-            </div><div class="value"><input type="text" value="" class="input" name="shop_requisites[BIK]" > </div>
         </div>
 
 
