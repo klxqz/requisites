@@ -24,6 +24,20 @@ class shopRequisitesPluginBackendSaveController extends waJsonController {
                 'BIK' => 'bik',
             )
         ),
+        'invoicejur' => array(
+            'type' => 'payment',
+            'replaces' => array(
+                'COMPANYNAME' => 'company_name',
+                'COMPANYADDRESS' => 'company_address',
+                'COMPANYPHONE' => 'company_phone',
+                'BANK_ACCOUNT_NUMBER' => 'bank_account_number',
+                'INN' => 'inn',
+                'KPP' => 'kpp',
+                'BANKNAME' => 'bank_name',
+                'BANK_KOR_NUMBER' => 'bank_kor_number',
+                'BIK' => 'bik',
+            )
+        ),   
     );
 
     public function execute() {
@@ -64,14 +78,10 @@ class shopRequisitesPluginBackendSaveController extends waJsonController {
                         $model = new shopPluginModel();
                         $payment_plugins = $model->listPlugins(shopPluginModel::TYPE_PAYMENT, array('all' => true));
                         foreach ($payment_plugins as $payment_plugin) {
-                            if ($payment_plugin['plugin'] == $plugin_id) {
-                                $plugin = array(
-                                    'id' => $payment_plugin['id'],
-                                    'plugin' => $plugin_id,
-                                    'settings' => $settings,
-                                    'shipping' => $model->listPlugins(shopPluginModel::TYPE_SHIPPING, array('payment' => $payment_plugin['id'], 'all' => true)),
-                                );
-                                shopPayment::savePlugin($plugin);
+                            if ($payment_plugin['plugin'] == $plugin_id) {                                
+                                $payment_plugin['settings'] = $settings;
+                                $payment_plugin['shipping'] = $model->listPlugins(shopPluginModel::TYPE_SHIPPING, array('payment' => $payment_plugin['id'], 'all' => true));
+                                shopPayment::savePlugin($payment_plugin);
                             }
                         }
                     }

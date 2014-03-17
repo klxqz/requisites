@@ -9,8 +9,8 @@ class shopRequisitesPluginSettingsAction extends waViewAction {
         $settings = $app_settings_model->get($this->plugin_id);
         $profiles = $app_settings_model->get($this->plugin_id, 'profiles');
         $profile_names = $app_settings_model->get($this->plugin_id, 'profile_names');
-        $profiles = json_decode($profiles, true);
-        $profile_names = json_decode($profile_names, true);
+        $profiles = $profiles ? json_decode($profiles, true) : array();
+        $profile_names = $profile_names ? json_decode($profile_names, true) : array();
         $this->view->assign('settings', $settings);
         $this->view->assign('profiles', $profiles);
         $this->view->assign('profile_names', $profile_names);
